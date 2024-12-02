@@ -2,6 +2,7 @@ build
 .vscode
 *.ilk
 *.pdb
+puzzle-input
 
 # Prerequisites
 *.d
