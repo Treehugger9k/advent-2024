@@ -1,6 +1,7 @@
 #include "assert.h"
 #include <algorithm>
 #include <charconv>
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -14,8 +15,8 @@ constexpr char CODE_DELIMITER = ' ';
 auto parse_lists(const char *filename) -> codes
 {
     codes ret;
-    const auto emplace = [&](std::vector<int> &code_list, 
-                             const std::string &line, 
+    const auto emplace = [&](std::vector<int> &code_list,
+                             const std::string &line,
                              size_t first,
                              size_t last)
     {
@@ -50,7 +51,7 @@ auto parse_lists(const char *filename) -> codes
 ///        but at least 1.
 /// @param begin - begin iterator
 /// @param end   - end iterator
-/// @return end iterator if valid, the forward most iterator of a failed 
+/// @return end iterator if valid, the forward most iterator of a failed
 ///         pair otherwise
 template <typename T>
 auto codes_are_valid(T begin, T end) -> std::pair<bool, T>
@@ -58,17 +59,17 @@ auto codes_are_valid(T begin, T end) -> std::pair<bool, T>
     constexpr auto is_safe = [](int diff, bool direction) -> bool
     {
         constexpr int MAX_VAL = 4;
-        return diff != 0 && 
-               std::abs(diff) < MAX_VAL && 
+        return diff != 0 &&
+               std::abs(diff) < MAX_VAL &&
                std::signbit(diff) == direction;
     };
 
     bool valid = true;
     auto it_last = begin;
-    
+
     assert(begin < end);
     if (begin + 1 == end) { return std::make_pair(false, end); }
-    
+
     const bool direction = std::signbit(*(begin + 1) - *begin);
     auto it = begin + 1;
     for (; it < end; it++)
@@ -88,7 +89,7 @@ auto puzzle1(const char *filename)
     size_t cSafeCodes = 0;
     for (const auto &code_list : codes)
     {
-        const auto [valid, it] = 
+        const auto [valid, it] =
             codes_are_valid(code_list.cbegin(), code_list.cend());
         if (valid) { cSafeCodes++; }
     }
@@ -108,7 +109,7 @@ auto puzzle2(const char *filename)
         // Beginning may have different direction than end
         auto valid_it = codes_are_valid(code_list.begin() + 1, code_list.end());
         if (valid_it.first) { cSafeCodes++; continue;}
-        
+
         const int erased_val = *it;
         const size_t ix = std::distance(code_list.begin(), it - 1);
         code_list.erase(it);
