@@ -3,6 +3,8 @@ build
 *.ilk
 *.pdb
 puzzle-input
+.vs
+input
 
 # Prerequisites
 *.d
